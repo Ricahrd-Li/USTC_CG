@@ -1,22 +1,28 @@
 # Qt Hello
 
-本文教会大家如何利用 Qt + CMake 创建一个 [Hello World 级别的项目](example) 
+本文教会大家如何利用 Qt + CMake 创建一个 [Hello World 级别的项目](hello/) 
+
+> [hello 项目](hello/) 代码已经填充完整了，只要大概试着操作就行，不然就重复代码了
 
 ## 创建空项目
 
-已提供简单可复用的 CMake 模板 [hello/](hello/)，我们将在其中添加文件从而得到 Qt 项目
-
 - 打开 Qt Creator
-  - 菜单栏文件 -> 新建项目或文件->Qt Wdgets Application -> Choose
+  - 菜单栏文件 -> 新建项目或文件->Qt Widgets Application -> Choose
     - 名称：hello
-    - 路径：[hello/src/App/](hello/src/App/) 
-    - 下一步直到完成，从而在 [hello/src/App/](hello/src/App/)hello/ 生成了一些文件
+    - 路径：[hello/src/](hello/src/) 
+    - 下一步直到完成，从而在 [hello/src/](hello/src/)hello/ 生成了一些文件
   - 关闭 Qt Creator
-- 删除 [hello/src/App/](hello/src/App/)hello/ 下的 \*.pro 和 \*.user（Qt Creator 所用的工程文件，我们用 CMake，所以不需要），只留下 \*.cpp，\*.h，\*.qrc，\*.ui
+- 删除 [hello/src/](hello/src/)hello/ 下的 \*.pro 和 \*.user（Qt Creator 所用的工程文件，我们用 CMake，所以不需要），只留下 \*.cpp，\*.h，\*.qrc，\*.ui
 - 添加文件 CMakeLists.txt，输入如下内容
 
 ```cmake
-Ubpa_AddTarget(MODE "EXE" QT ON LIBS "Qt5::Widgets")
+Ubpa_AddTarget(
+  TEST
+  QT
+  MODE EXE
+  LIB
+    Qt5::Widgets
+)
 ```
 
 - CMake 三连（configure + generate + open project）
@@ -114,6 +120,8 @@ private:
 添加函数定义
 
 ```c++
+#include <QToolBar> // include QToolBar head file
+
 void MainWindow::CreateButtons()
 {
     // 创建动作，标签为Hello world
@@ -121,7 +129,7 @@ void MainWindow::CreateButtons()
     hello_world_action_ = new QAction(tr("&Hello world"), this);
     
     // 此句先不用理会
-    // connect(hello_world_action_, &QAction::triggered, this, &QTHelloWorld::HelloWorld);
+    // connect(hello_world_action_, &QAction::triggered, this, &MainWindow::HelloWorld);
     
     // 创建菜单，标签为Main
     main_menu_ = menuBar()->addMenu(tr("&Main"));
@@ -173,7 +181,7 @@ void MainWindow::CreateButtons()
     
     // 使用 connect 函数将信号与槽连接起来
     // connect(信号发射方，信号，信号接收方，槽函数);
-    connect(hello_world_action_, &QAction::triggered, this, &QTHelloWorld::HelloWorld);
+    connect(hello_world_action_, &QAction::triggered, this, &MainWindow::HelloWorld);
     
     main_menu_ = menuBar()->addMenu(tr("&Main"));
     main_menu_->addAction(hello_world_action_);
